@@ -58,6 +58,12 @@ class Token:
         self.name = name
         self.line_num = line_num
         self.value = value
+    
+    def __str__(self) -> str:
+        return f"<{self.name}, {self.line_num}, \"{self.value}\">"
+    
+    def __repr__(self) -> str:
+        return str(self)
 
 # This function can be used later to identify tokens from the input stream
 def get_next_token(text):
@@ -69,7 +75,7 @@ def get_next_token(text):
 def get_tokens():
     tokens = []
     count = 0
-    for line in read_file_line("main.txt"):
+    for line in read_file_line("tokens.txt"):
         count += 1
         for beg in range(0, len(line)):
             for end in range(1, len(line) + 1):
@@ -100,4 +106,4 @@ def get_tokens():
                 
 
 if __name__ == "__main__":
-    get_tokens()
+    print(get_tokens())
