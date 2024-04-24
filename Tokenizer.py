@@ -35,6 +35,22 @@ token_map = {
     ";": "T_Semicolon", # Semicolon
     ",": "T_Comma",    # Comma
 }
+
+def get_token_until_delsp(token: str) -> str:
+    index = 0
+    for i in range(len(token)):
+        if is_whitespace(token[i]) or is_delimiter(token[i]):
+            index = i
+            break
+
+    return token[0:index]
+
+def get_token_name(token: str):
+    token_name = ""
+    if token in token_map.keys():
+        token_name = token_map[token]
+    return token_name
+
 #removinf spaces and comments
 def is_comment(token: str):
     state = 0
@@ -50,18 +66,57 @@ def is_comment(token: str):
     return False
         
     
-# Regular expressions are not used here, but could be added for more complex patterns
 def is_identifier(token: str):
-    """Checks if a character is a letter, digit, or underscore."""
-    pass
+    """Checks if a token is a combination of letters, digits, or underscore."""
+    golabi = get_token_until_delsp(token)
+
+    if golabi[0] =='_' or golabi[0].isalpha():
+        for i in range(len(golabi)):
+            if golabi[i] =='_' or golabi[i].isalnum():
+                continue
+            else:
+                return False, None
+        
+        return True, golabi
+   
 
 def is_operator(token: str):
     """Checks if a character is one of the defined operators."""
-    pass
+
+    if token[0] == '=':
+        if token[1] == '=':
+            return True, get_token_name(token[0:2])
+        return True, get_token_name(token[0])
+    elif token[0] == '<':
+        if token[1] == '=':
+            return True, get_token_name(token[0:2])
+        return True, get_token_name(token[0])
+    elif token[0] == '>':
+        if token[1] == '=':
+            return True, get_token_name(token[0:2])
+        return True, get_token_name(token[0])
+    elif token[0] == '!':
+        if token[1] == '=':
+            return True, get_token_name(token[0:2])
+        return True, get_token_name(token[0])
+    elif token[0] == '+':
+        return True, get_token_name(token[0])
+    elif token[0] == '-':
+        return True, get_token_name(token[0])
+    elif token[0] == '*':
+        return True, get_token_name(token[0])
+    elif token[0] == '/':
+        return True, get_token_name(token[0])
+    elif token[0] == '%':
+        return True, get_token_name(token[0])
+    elif token[0:1] == "&&":
+        return True, get_token_name(token[0:1])
+    elif token[0:1] == "||":
+        return True, get_token_name(token[0:1])
+
 
 def is_delimiter(token: str):
-    if token in token_map.keys():
-        token_name = token_map[token]
+    token_name = get_token_name(token)
     
     if token == '[' or token == ']' or token == '(' or token == ')' or token == '{' or token == '}' or token == ';' or token == ',':
         return True, token_name
@@ -81,72 +136,34 @@ def is_litstring(token: str):
     pass
 
 def is_keyword(token: str):
-    if token[0] == 'b':
-        if token[1:4] == "ool":
-            if is_whitespace(token[4]) or is_delimiter(token[4])[0]:
-                return True, "Bool"
-            else:
-                return False, None
-        elif token[1: 5] == "reak":
-            if is_whitespace(token[5]) or is_delimiter(token[5])[0]:
-                return True, "Break"
-            else:
-                return False, None
-    elif token[0] == 'c':
-        if token[1:4] == "har":
-            if is_whitespace(token[4]) or is_delimiter(token[4])[0]:
-                return True, "Char"
-            else:
-                return False, None
-        elif token[1:8] == "ontinue":
-            if is_whitespace(token[8]) or is_delimiter(token[8])[0]:
-                return True, "Continue"
-            else:
-                return False, None
-    elif token[:4] == "else":
-        if is_whitespace(token[4]) or is_delimiter(token[4])[0]:
-            return True, "Else"
-        else:
-                return False, None
-    elif token[0] == "f":
-        if token[1:5] == "alse":
-            if is_whitespace(token[5]) or is_delimiter(token[5])[0]:
-                return True, "False"
-            else:
-                return False, None
-        if token[1:3] == "or":
-            if is_whitespace(token[3]) or is_delimiter(token[3])[0]:
-                return True, "For"
-            else:
-                return False, None
-    elif token[0] == 'i':
-        if token[1:2] == "f":
-            if is_whitespace(token[2]) or is_delimiter(token[2])[0]:
-                return True, "If"
-            else:
-                return False, None
-        if token[1:3] == "nt":
-            if is_whitespace(token[3]) or is_delimiter(token[3])[0]:
-                return True, "Int"
-            else:
-                return False, None
-    elif token[:5] == "print":
-        if is_whitespace(token[5]) or is_delimiter(token[5])[0]:
-            return True, "Print"
-        else:
-            return False, None
-    elif token[:6] == "return":
-        if is_whitespace(token[6]) or is_delimiter(token[6])[0]:
-            return True, "Return"
-        else:
-            return False, None
-    elif token[:4] == "true":
-        if is_whitespace(token[4]) or is_delimiter(token[4])[0]:
-            return True, "True"
-        else:
-            return False, None
-    return False, None
-
+    golabi = get_token_until_delsp(token)
+    
+    if golabi == "bool":
+        return True, "Bool"
+    elif golabi == "break":
+        return True, "Break"
+    elif golabi == "char":
+        return True, "Char"
+    elif golabi == "continue":
+        return True, "Continue"
+    elif golabi == "else":
+        return True, "Else"
+    elif golabi == "false":
+        return True, "False"
+    elif golabi == "for":
+        return True, "For"
+    elif golabi == "if":
+        return True, "If"
+    elif golabi == "int":
+        return True, "Int"
+    elif golabi == "print":
+        return True, "Print"
+    elif golabi == "return":
+        return True, "Return"
+    elif golabi == "true":
+        return True, "True"
+    else:
+        return False, None
 
 def is_whitespace(token: str):
         if ord(token) == 32 or ord(token) == 10 or ord(token) == 9:
@@ -201,10 +218,12 @@ def get_tokens():
                 yield Token("T_" + is_keyword(line[beg:])[1], count, None)
                 
                 beg += len(is_keyword(line[beg:])[1]) - 1
-            elif is_identifier(line[beg:]):
-                break
+            elif is_identifier(line[beg:])[0]:
+                yield Token("T_ID", count, is_identifier(line[beg:])[1])
+
+                beg += len(is_identifier(line[beg:])[1])
             elif is_operator(line[beg:]):
-                break
+                pass
             elif is_boolean_operator(line[beg:]):
                 break
             elif is_litnum(line[beg:]):
