@@ -69,7 +69,7 @@ def is_hex(s: str):
     else:
         return False
 
-#removinf spaces and comments
+# remove inf spaces and comments
 def is_comment(token: str):
     state = 0
     for char in token:
