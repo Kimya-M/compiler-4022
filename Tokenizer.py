@@ -41,9 +41,7 @@ def get_token_until_delspop(token: str) -> str:
     index = 0
     for i in range(len(token)):
         if is_whitespace(token[i]) or is_delimiter(token[i])[0] or is_a_operator(token[i]):
-            #print(is_whitespace(token[i]),is_delimiter(token[i])[0],is_operator(token[i])[0])
             index = i
-            #print(token[:index],"hey")
             break
     return token[0:index]
 
@@ -71,7 +69,6 @@ def is_hex(s: str):
     else:
         return False
 
-# remove inf spaces and comments
 def is_comment(token: str):
     state = 0
     for char in token:
@@ -87,9 +84,7 @@ def is_comment(token: str):
         
     
 def is_identifier(token: str):
-    """Checks if a token is a combination of letters, digits, or underscore."""
     golabi = get_token_until_delspop(token)
-    #print(golabi, "here", len(golabi))
     if len(golabi) == 0:
         return False, None
     if golabi[0] == '_' or golabi[0].isalpha():
@@ -104,8 +99,6 @@ def is_identifier(token: str):
    
 
 def is_operator(token: str):
-    """Checks if a character is one of the defined operators."""
-
     if token[0] == '=':
         if token[1] == '=':
             return True, "=="
