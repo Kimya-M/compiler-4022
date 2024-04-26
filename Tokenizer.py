@@ -49,7 +49,9 @@ def get_token_until_delspop(token: str) -> str:
 
 
 def is_a_operator(token:str):
-    if token[0] == '=' or token[0] == '+' or token[0] == '-' or token[0] == '*' or token[0] == '/' or token[0] == '%' or token[0] == '!' or token[0] == '<' or token[0] == '>':
+    if token[0] == '=' or token[0] == '+' or token[0] == '-' \
+        or token[0] == '*' or token[0] == '/' or token[0] == '%' \
+        or token[0] == '!' or token[0] == '<' or token[0] == '>':
         return True
     return False 
 
@@ -140,7 +142,8 @@ def is_operator(token: str):
 def is_delimiter(token: str):
     token_name = get_token_name(token)
     
-    if token == '[' or token == ']' or token == '(' or token == ')' or token == '{' or token == '}' or token == ';' or token == ',':
+    if token == '[' or token == ']' or token == '(' or token == ')' \
+        or token == '{' or token == '}' or token == ';' or token == ',':
         return True, token_name
     else:
         return False, None
@@ -225,9 +228,7 @@ def read_file_line(file_name: str):
     with open(file_name, "r") as file:
         for line in file:
             yield line
-
-
-# This is just a placeholder for actual token objects (you can define a Token class later)
+            
 class Token:
     def __init__(self, name, line_num, value):
         self.name = name
@@ -239,12 +240,6 @@ class Token:
     
     def __repr__(self) -> str:
         return str(self)
-
-# This function can be used later to identify tokens from the input stream
-def get_next_token(text):
-    # Implement logic to identify the next token based on character sequences
-    # and return a Token object with its type and value
-    pass
 
 
 def get_tokens():
