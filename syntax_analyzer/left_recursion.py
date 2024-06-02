@@ -78,10 +78,10 @@ def print_grammar(grammar):
             print(f"{nt} -> {prod}")
     
 grammar = {
-    "E": [["E", "+", "T"],["T"]],
-    "T": [["T", "*", "F"], ["F"]],
-    "F": [["(", "E", ")"], ["id"]]
+    "S": ["iEtS", "iEtSeS", "a"],
+    "E": ["b"]
 }
+
 
     
 new_grammar = remove_left_recursion(grammar)

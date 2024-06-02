@@ -51,8 +51,10 @@ def left_factor(grammar):
 
 # Example grammar
 grammar = {
-    "B": [["a", "b", "C"], ["a", "b", "C", "d"], ["a", "b"],["c"],["b","c"]]
+    "S": ["iEtS", "iEtSeS", "a"],
+    "E": ["b"]
 }
+
 
 factored_grammar = left_factor(grammar)
 print(factored_grammar)
