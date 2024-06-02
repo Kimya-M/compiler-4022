@@ -37,10 +37,16 @@ def remove_immidiate_left_recursion(nonterminal,productions):
         
         new_has_left_rec.append("ε")
         
-        updated_productions = {
-            nonterminal: new_no_left_rec,
-            new_non_terminal: new_has_left_rec
-        }
+        if new_no_left_rec:
+            updated_productions = {
+                nonterminal: new_no_left_rec,
+                new_non_terminal: new_has_left_rec
+            }
+        else:
+            updated_productions = {
+                nonterminal: [new_non_terminal],
+                new_non_terminal: new_has_left_rec
+            }
     else:
         updated_productions = {}
     
@@ -78,8 +84,9 @@ def print_grammar(grammar):
             print(f"{nt} -> {prod}")
     
 grammar = {
-    "S": ["iEtS", "iEtSeS", "a"],
-    "E": ["b"]
+    "S": [["S", "E", "A"]],
+    # "S": ["iEtS", "iEtSeS", "a"],
+    # "E": ["b"]
 }
 
 
