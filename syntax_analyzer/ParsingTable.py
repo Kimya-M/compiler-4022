@@ -7,7 +7,6 @@ def create_parsing_table(grammar: dict, start_symbol="S"):
 
     # Populate the parsing table
     for nonterminal, productions in grammar.items():
-        print(nonterminal)
         for production in productions:
             first_set = compute_first_set(production, compute_first(grammar))
             all_follow_set = compute_follow(grammar, start_symbol)
@@ -16,13 +15,7 @@ def create_parsing_table(grammar: dict, start_symbol="S"):
                 if first_terminal != 'ε':
                     parsing_table[nonterminal][first_terminal] = production
                 else:
-                    print("here")
-                    print(first_terminal)
-                    print(production)
                     for terminal in all_follow_set[nonterminal]:
-                        print("here2")
-                        print(terminal)
-                        print(production)
                         parsing_table[nonterminal][terminal] = production
                         if '$' in all_follow_set[nonterminal]:
                             parsing_table[nonterminal]['$'] = production
