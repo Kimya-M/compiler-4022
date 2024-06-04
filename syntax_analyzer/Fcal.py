@@ -66,26 +66,27 @@ def compute_follow(grammar, start_symbol):
     return follow
 
 
-# Example grammar to test
-grammar = {
-    "S": ["iEtS", "iEtSeS", "a"],
-    "E": ["b"]
-}
+if __name__ == "__main__":
+    # Example grammar to test
+    grammar = {
+        "S": ["iEtS", "iEtSeS", "a"],
+        "E": ["b"]
+    }
 
 
-start_symbol = "S"
+    start_symbol = "S"
 
 
-first_sets = compute_first(grammar)
-follow_sets = compute_follow(grammar, start_symbol)
+    first_sets = compute_first(grammar)
+    follow_sets = compute_follow(grammar, start_symbol)
 
-better_first_set = {}
+    better_first_set = {}
 
-for non_terminal, productions in first_sets.items():
-    if non_terminal.isupper():
-        print(f"First set {non_terminal} : {productions}")
-        better_first_set[non_terminal] = productions
-        
-#print("Follow sets:", follow_sets)
-for non_terminal, productions in follow_sets.items():
-        print(f"Follow set {non_terminal} : {productions}")
+    for non_terminal, productions in first_sets.items():
+        if non_terminal.isupper():
+            print(f"First set {non_terminal} : {productions}")
+            better_first_set[non_terminal] = productions
+            
+    #print("Follow sets:", follow_sets)
+    for non_terminal, productions in follow_sets.items():
+            print(f"Follow set {non_terminal} : {productions}")
