@@ -4,12 +4,12 @@ from Fcal import compute_first, compute_follow
 def create_parsing_table(grammar: dict, start_symbol="S"):
     # Initialize the parsing table
     parsing_table = {nonterminal: {} for nonterminal in grammar}
+    all_follow_set = compute_follow(grammar, start_symbol)
+    all_first_set = compute_first(grammar)
 
-    # Populate the parsing table
     for nonterminal, productions in grammar.items():
         for production in productions:
-            first_set = compute_first_set(production, compute_first(grammar))
-            all_follow_set = compute_follow(grammar, start_symbol)
+            first_set = compute_first_set(production, all_first_set)
 
             for first_terminal in first_set:
                 if first_terminal != 'ε':
@@ -19,6 +19,12 @@ def create_parsing_table(grammar: dict, start_symbol="S"):
                         parsing_table[nonterminal][terminal] = production
                         if '$' in all_follow_set[nonterminal]:
                             parsing_table[nonterminal]['$'] = production
+
+    # Add synchronizing tokens for error handling
+    for nonterminal, follow_set in all_follow_set.items():
+        for terminal in follow_set:
+            if terminal not in parsing_table[nonterminal]:
+                parsing_table[nonterminal][terminal] = "synch"
 
     return parsing_table
 
