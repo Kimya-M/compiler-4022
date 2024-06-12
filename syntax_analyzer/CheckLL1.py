@@ -1,7 +1,7 @@
 from ParsingTable import compute_first_set, compute_first, compute_follow
 
 
-def is_LL1(grammar, start_symbol="S"):
+def is_LL1(grammar: dict, start_symbol: str):
     try:
         all_follow_set = compute_follow(grammar, start_symbol)
     except RecursionError as e:

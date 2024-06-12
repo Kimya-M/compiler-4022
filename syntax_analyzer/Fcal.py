@@ -67,6 +67,23 @@ def compute_follow(grammar, start_symbol):
     return follow
 
 
+def print_first_sets(grammar: dict):
+    first_sets = compute_first(grammar)
+    better_first_set = {}
+
+    for non_terminal, productions in first_sets.items():
+        if non_terminal.isupper():
+            print(f"First set {non_terminal} : {productions}")
+            better_first_set[non_terminal] = productions
+
+
+def print_follow_sets(grammar: dict, start_symbol: str):
+    follow_sets = compute_follow(grammar, start_symbol)
+    # print("Follow sets:", follow_sets)
+    for non_terminal, productions in follow_sets.items():
+        print(f"Follow set {non_terminal} : {productions}")
+
+
 if __name__ == "__main__":
     # Example grammar to test
     grammar = {
@@ -76,16 +93,5 @@ if __name__ == "__main__":
 
     start_symbol = "S"
 
-    first_sets = compute_first(grammar)
-    follow_sets = compute_follow(grammar, start_symbol)
-
-    better_first_set = {}
-
-    for non_terminal, productions in first_sets.items():
-        if non_terminal.isupper():
-            print(f"First set {non_terminal} : {productions}")
-            better_first_set[non_terminal] = productions
-
-    # print("Follow sets:", follow_sets)
-    for non_terminal, productions in follow_sets.items():
-        print(f"Follow set {non_terminal} : {productions}")
+    print_first_sets(grammar)
+    print_follow_sets(grammar, start_symbol)
