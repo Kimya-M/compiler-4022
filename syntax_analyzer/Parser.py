@@ -10,7 +10,7 @@ GRAMMAR = {
         "E": [["E", "t_aop_pl", "T"], ["T"]],
         "T": [["T", "t_aop_ml", "F"], ["F"]],
         "F": [["t_lp", "E", "t_rp"], ["t_id"]],
-    }
+}
 
 START_SYMBOL = "E"
 
