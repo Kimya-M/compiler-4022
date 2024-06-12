@@ -1,2 +1,2 @@
-*id1* + id2 nakjcns
-int bool + + *
+(id1 + id3 * id2
+

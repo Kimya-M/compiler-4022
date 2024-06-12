@@ -1,13 +1,11 @@
-from ParsingTable import create_parsing_table, print_parsing_table
 from Tokenizer import get_tokens
 from anytree import Node, RenderTree
 
 
-def predictive_parsing(parsing_table: dict, start_symbol: str):
+def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node:
     stack = ['$', start_symbol]
     root = Node(start_symbol)
-    current_node = root
-
+    parent_stack = [root]
     token_generator = get_tokens()
     current_token = next(token_generator)
 
@@ -18,11 +16,14 @@ def predictive_parsing(parsing_table: dict, start_symbol: str):
                 if current_token == "$":
                     break
 
-        print("-----------")       
+        print("-----------")
         print(f"Stack: {stack}")
         print(f"Current Token: {current_token}")
 
         top = stack[-1]
+        if stack != ["$"]:
+            current_node = parent_stack.pop()
+
         if current_token == "$" and top == "$":
             break
         elif current_token == "$":
@@ -34,41 +35,40 @@ def predictive_parsing(parsing_table: dict, start_symbol: str):
             current_token_value = current_token.value
             current_token_line = current_token.line_num
 
-  
         if top == current_token_name:
-            print(f"Matched Token: {current_token_name}, Value: {current_token_value}")
-            # current_node = current_node.parent
             stack.pop()
             current_token = next(token_generator)
+            Node(current_token_value, parent=current_node)
+
+            print(f"Matched Token: {current_token_name}, Value: {current_token_value}")
         elif top.isupper():
             if top in parsing_table.keys() and current_token_name in parsing_table[top].keys():
                 production = parsing_table[top][current_token_name]
 
                 print(f"Action: {top} -> {production}")
 
-                current_node = Node(current_token, parent=current_node)
-                
                 if production == "synch":
                     print(f"Syntax Error at line #{current_token_line}, Illegal {current_token_name}")
                     stack.pop()
-                    continue
                 elif production != ['ε']:
                     stack.pop()
                     for symbol in reversed(production):
                         stack.append(symbol)
-                        Node(symbol, parent=current_node)
-                    current_node = current_node.parent
+
+                        child_node = Node(symbol.upper(), parent=current_node)
+                        parent_stack.append(child_node)
                 else:
+                    child_node = Node("ε", parent=current_node)
                     stack.pop()
             else:
                 print(f"Syntax Error at line #{current_token_line}, Extra token: {current_token_name}")
-                print(f"M[A, a] is empty, Discarding Token...")
+                print("M[A, a] is empty, Discarding Token...")
                 current_token = next(token_generator)
 
         else:
             stack.pop()
             print(f"Syntax Error at line #{current_token_line}, Missing: {current_token_name}")
-            print(f"X is not Terminal")
+            print("X is not Terminal")
 
     return root
 
@@ -79,6 +79,8 @@ def print_parse_tree(root: Node):
 
 
 if __name__ == "__main__":
+    from ParsingTable import create_parsing_table
+
     grammar = {
         "E": [["T", "E'"]],
         "E'": [["t_aop_pl", "T", "E'"], ["ε"]],
@@ -89,5 +91,5 @@ if __name__ == "__main__":
 
     parsing_table = create_parsing_table(grammar, start_symbol="E")
     # print_parsing_table(parsing_table)
-    parse_tree_root = predictive_parsing(parsing_table, start_symbol="E")
+    parse_tree_root = predictive_parser(parsing_table, start_symbol="E")
     print_parse_tree(parse_tree_root)
