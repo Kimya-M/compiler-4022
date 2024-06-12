@@ -8,6 +8,7 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
     parent_stack = [root]
     token_generator = get_tokens()
     current_token = next(token_generator)
+    pop_node_stack = True
 
     while stack:
         if current_token != "$":
@@ -21,8 +22,10 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
         print(f"Current Token: {current_token}")
 
         top = stack[-1]
-        if stack != ["$"]:
+        if stack != ["$"] and pop_node_stack:
             current_node = parent_stack.pop()
+        else:
+            pop_node_stack = True
 
         if current_token == "$" and top == "$":
             break
@@ -40,7 +43,7 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
             current_token = next(token_generator)
             Node(current_token_value, parent=current_node)
 
-            print(f"Matched Token: {current_token_name}, Value: {current_token_value}")
+            print(f"Matched Token: {current_token_name.upper()}, Value: {current_token_value}")
         elif top.isupper():
             if top in parsing_table.keys() and current_token_name in parsing_table[top].keys():
                 production = parsing_table[top][current_token_name]
@@ -64,11 +67,11 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
                 print(f"Syntax Error at line #{current_token_line}, Extra token: {current_token_name}")
                 print("M[A, a] is empty, Discarding Token...")
                 current_token = next(token_generator)
+                pop_node_stack = False
 
         else:
             stack.pop()
-            print(f"Syntax Error at line #{current_token_line}, Missing: {current_token_name}")
-            print("X is not Terminal")
+            print(f"Syntax Error at line #{current_token_line}, Extra: {current_token_name}")
 
     return root
 
