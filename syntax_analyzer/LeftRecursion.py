@@ -1,8 +1,7 @@
-
-    
-def remove_immidiate_left_recursion(nonterminal,productions):
+def remove_immediate_left_recursion(nonterminal, productions):
     counter = 1
-    def get_new_non_terminal(base): #making the name of the new terminal :D 
+
+    def get_new_non_terminal(base):  # making the name of the new terminal :D
         nonlocal counter
         if counter == 1:
             new_non_terminal = base + str(counter)
@@ -11,7 +10,7 @@ def remove_immidiate_left_recursion(nonterminal,productions):
             new_non_terminal = base + str(counter)
         counter += 1
         return new_non_terminal
-    
+
     has_left_rec = []
     no_left_rec = []
     for production in productions:
@@ -19,24 +18,22 @@ def remove_immidiate_left_recursion(nonterminal,productions):
             has_left_rec.append(production)
         else:
             no_left_rec.append(production)
-    
-    #print("has left recursion",has_left_rec)
-    #print("no left recursion",no_left_rec)
+
+    # print("has left recursion",has_left_rec)
+    # print("no left recursion",no_left_rec)
     if has_left_rec:
         new_non_terminal = get_new_non_terminal(nonterminal)
         new_has_left_rec = []
         new_no_left_rec = []
-        
-        
 
         if no_left_rec:
             new_no_left_rec = [prod + [new_non_terminal] for prod in no_left_rec]
-        
+
         if has_left_rec:
             new_has_left_rec = [prod[1:] + [new_non_terminal] for prod in has_left_rec]
-        
+
         new_has_left_rec.append("ε")
-        
+
         if new_no_left_rec:
             updated_productions = {
                 nonterminal: new_no_left_rec,
@@ -49,9 +46,10 @@ def remove_immidiate_left_recursion(nonterminal,productions):
             }
     else:
         updated_productions = {}
-    
+
     return updated_productions
-    
+
+
 def remove_left_recursion(grammar):
     non_terminals = list(grammar.keys())
     grammar_copy = {k: v[:] for k, v in grammar.items()}
@@ -66,30 +64,31 @@ def remove_left_recursion(grammar):
                         new_productions.append(Aj_production + production[len(A_j):])
                 else:
                     new_productions.append(production)
-                
+
                 grammar_copy[A_i] = new_productions
-        
-        #print("now",A_i)
-        immediate_left_recursion_removed = remove_immidiate_left_recursion(A_i, grammar_copy[A_i])
-        #print("this:",immediate_left_recursion_removed)
+
+        # print("now",A_i)
+        immediate_left_recursion_removed = remove_immediate_left_recursion(A_i, grammar_copy[A_i])
+        # print("this:",immediate_left_recursion_removed)
         grammar_copy.update(immediate_left_recursion_removed)
-        #print("new grammer", grammar_copy)
-    
+        # print("new grammar", grammar_copy)
+
     return grammar_copy
+
 
 def print_grammar(grammar):
     print("\nNew set of productions: ")
     for nt, productions in grammar.items():
         for prod in productions:
             print(f"{nt} -> {prod}")
-    
-grammar = {
-    "S": [["S", "E", "A"]],
-    # "S": ["iEtS", "iEtSeS", "a"],
-    # "E": ["b"]
-}
 
 
-    
-new_grammar = remove_left_recursion(grammar)
-print_grammar(new_grammar)
+if __name__ == "__main__":
+    grammar = {
+        "S": [["S", "E", "A"]],
+        # "S": ["iEtS", "iEtSeS", "a"],
+        # "E": ["b"]
+    }
+
+    new_grammar = remove_left_recursion(grammar)
+    print_grammar(new_grammar)

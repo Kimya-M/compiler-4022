@@ -58,7 +58,7 @@ if __name__ == "__main__":
     #     "E": [["T", "*", "F"], ["F"]],
     #     "F": [["(", "E", ")"], ["id"]],
     # }
-    
+
     grammar = {
         "E": [["T", "E'"]],
         "E'": [["+", "T", "E'"], ["ε"]],
@@ -66,6 +66,6 @@ if __name__ == "__main__":
         "T'": [["*", "F", "T'"], ["ε"]],
         "F": [["(", "E", ")"], ["id"]],
     }
-    
+
     parsing_table = create_parsing_table(grammar, start_symbol="E")
     print_parsing_table(parsing_table)

@@ -22,9 +22,9 @@ token_map = {
     ">=": "T_ROP_E",  # Greater than or equal operator
     "!=": "T_ROP_NE",  # Not equal operator
     "==": "T_ROP_E",   # Equal operator
-    "&&": "T_LOP_AND", # Logical AND operator
+    "&&": "T_LOP_AND",  # Logical AND operator
     "||": "T_LOP_OR",  # Logical OR operator
-    "!": "T_LOP_NOT", # Logical NOT operator
+    "!": "T_LOP_NOT",  # Logical NOT operator
     "=": "T_Assign",  # Assignment operator
     "(": "T_LP",      # Left parenthesis
     ")": "T_RP",      # Right parenthesis
@@ -32,12 +32,13 @@ token_map = {
     "}": "T_RC",      # Right curly brace
     "[": "T_LB",      # Left square bracket
     "]": "T_RB",      # Right square bracket
-    ";": "T_Semicolon", # Semicolon
+    ";": "T_Semicolon",  # Semicolon
     ",": "T_Comma",    # Comma
 }
 
+
 def get_token_until_delspop(token: str) -> str:
-    #print(token)
+    # print(token)
     index = 0
     for i in range(len(token)):
         if is_whitespace(token[i]) or is_delimiter(token[i])[0] or is_a_operator(token[i]):
@@ -46,18 +47,20 @@ def get_token_until_delspop(token: str) -> str:
     return token[0:index]
 
 
-def is_a_operator(token:str):
+def is_a_operator(token: str):
     if token[0] == '=' or token[0] == '+' or token[0] == '-' \
-        or token[0] == '*' or token[0] == '/' or token[0] == '%' \
-        or token[0] == '!' or token[0] == '<' or token[0] == '>':
+            or token[0] == '*' or token[0] == '/' or token[0] == '%' \
+            or token[0] == '!' or token[0] == '<' or token[0] == '>':
         return True
-    return False 
+    return False
+
 
 def get_token_name(token: str):
     token_name = ""
     if token in token_map.keys():
         token_name = token_map[token]
     return token_name
+
 
 def is_hex(s: str):
     if s.startswith("0X") or s.startswith("0x"):
@@ -68,6 +71,7 @@ def is_hex(s: str):
             return False
     else:
         return False
+
 
 def is_comment(token: str):
     state = 0
@@ -81,22 +85,22 @@ def is_comment(token: str):
         elif state == 2:
             return True
     return False
-        
-    
+
+
 def is_identifier(token: str):
     golabi = get_token_until_delspop(token)
     if len(golabi) == 0:
         return False, None
     if golabi[0] == '_' or golabi[0].isalpha():
         for i in range(len(golabi)):
-            if golabi[i] =='_' or golabi[i].isalnum():
+            if golabi[i] == '_' or golabi[i].isalnum():
                 continue
             else:
                 return False, None
-        
+
         return True, golabi
     return False, None
-   
+
 
 def is_operator(token: str):
     if token[0] == '=':
@@ -134,12 +138,13 @@ def is_operator(token: str):
 
 def is_delimiter(token: str):
     token_name = get_token_name(token)
-    
+
     if token == '[' or token == ']' or token == '(' or token == ')' \
-        or token == '{' or token == '}' or token == ';' or token == ',':
+            or token == '{' or token == '}' or token == ';' or token == ',':
         return True, token_name
     else:
         return False, None
+
 
 def is_litnum(token: str):
     if token[0].isnumeric() or token[0] == '-':
@@ -153,6 +158,7 @@ def is_litnum(token: str):
             return True, "T_Decimal", golabi
     else:
         return False, None, None
+
 
 def is_litstring(token: str):
     if token[0] == "'":
@@ -176,14 +182,13 @@ def is_litstring(token: str):
 
         return True, "T_String", golabi
 
-
-    else: 
+    else:
         return False, None, None
 
 
 def is_keyword(token: str):
     golabi = get_token_until_delspop(token)
-    
+
     if golabi == "bool":
         return True, "Bool"
     elif golabi == "break":
@@ -211,50 +216,52 @@ def is_keyword(token: str):
     else:
         return False, None
 
+
 def is_whitespace(token: str):
-        if ord(token) == 32 or ord(token) == 10 or ord(token) == 9:
-            return True
-        else:
-            return False
+    if ord(token) == 32 or ord(token) == 10 or ord(token) == 9:
+        return True
+    else:
+        return False
+
 
 def read_file_line(file_name: str):
     with open(file_name, "r") as file:
         for line in file:
             yield line
-            
+
+
 class Token:
     def __init__(self, name, line_num, value):
         self.name = name.lower()
         self.line_num = line_num
         self.value = value
-    
+
     def __str__(self) -> str:
         return f"<{self.name}, {self.line_num}, {repr(self.value)}>"
-    
+
     def __repr__(self) -> str:
         return str(self)
 
 
 def get_tokens():
-    tokens = []
     count = 0
     for line in read_file_line("tests/test1.txt"):
         count += 1
         beg = 0
-        while(beg < len(line)):
+        while beg < len(line):
             if is_comment(line[beg:]):
                 yield Token("T_Comment", count, line[beg + 2:])
-                
+
                 beg = len(line)
             elif is_whitespace(line[beg:beg + 1]):
                 yield Token("T_Whitespace", count, line[beg:beg + 1])
-                
+
             elif is_delimiter(line[beg:beg + 1])[0]:
                 yield Token(is_delimiter(line[beg:beg + 1])[1], count, line[beg:beg + 1])
-                
+
             elif is_keyword(line[beg:])[0]:
                 yield Token("T_" + is_keyword(line[beg:])[1], count, None)
-                
+
                 beg += len(is_keyword(line[beg:])[1]) - 1
             elif is_identifier(line[beg:])[0]:
                 yield Token("T_ID", count, is_identifier(line[beg:])[1])
@@ -263,18 +270,18 @@ def get_tokens():
             elif is_operator(line[beg:])[0]:
                 operator = is_operator(line[beg:])[1]
                 token_name = get_token_name(operator)
-                
+
                 yield Token(token_name, count, operator)
 
                 beg += len(operator) - 1
 
             elif is_litnum(line[beg:])[0]:
-                _ , token_name, number= is_litnum(line[beg:])
+                _, token_name, number = is_litnum(line[beg:])
                 yield Token(token_name, count, number)
 
                 beg += len(number) - 1
             elif is_litstring(line[beg:])[0]:
-                _ , token_name, word = is_litstring(line[beg:])
+                _, token_name, word = is_litstring(line[beg:])
                 yield Token(token_name, count, word)
                 beg += len(word) - 1
             beg += 1

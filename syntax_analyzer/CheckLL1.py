@@ -7,7 +7,7 @@ def is_LL1(grammar, start_symbol="S"):
     except RecursionError as e:
         print(e)
         return False
-    
+
     for nonterminal, productions in grammar.items():
         for i in range(len(productions)):
             for j in range(i + 1, len(productions)):
