@@ -17,19 +17,28 @@ def is_LL1(grammar: dict, start_symbol: str):
                 first_alpha = compute_first_set(alpha, compute_first(grammar))
                 first_beta = compute_first_set(beta, compute_first(grammar))
 
-                # Check if First(alpha) and First(beta) are disjoint
+                # Check if First(alpha) and First(beta) are not disjoint
                 if first_alpha.intersection(first_beta):
-                    return False
+                    print("First(alpha) and First(beta) are not disjoint")
+                    print(f"alpha: {nonterminal} -> {alpha}, beta: {nonterminal} -> {beta}")
+                    print(f"first(alpha): {first_alpha}, first(beta): {first_beta}")
+                    # return False
 
                 # Check if epsilon is in First(beta) and First(alpha) intersect Follow(A) is not empty
                 if 'ε' in first_beta:
                     if first_alpha.intersection(all_follow_set[nonterminal]):
-                        return False
+                        print("First(alpha) intersect Follow(A) is not empty")
+                        print(f"alpha: {nonterminal} -> {alpha}, beta: {nonterminal} -> {beta}")
+                        print(f"first(alpha): {first_alpha}, follow(A): {all_follow_set[nonterminal]}")
+                        # return False
 
                 # Check if epsilon is in First(alpha) and First(beta) intersect Follow(A) is not empty
                 if 'ε' in first_alpha:
                     if first_beta.intersection(all_follow_set[nonterminal]):
-                        return False
+                        print("First(beta) intersect Follow(A) is not empty")
+                        print(f"beta: {nonterminal} -> {beta}")
+                        print(f"follow(A): {all_follow_set[nonterminal]}, first(beta): {first_beta}")
+                        # return False
 
     return True
 

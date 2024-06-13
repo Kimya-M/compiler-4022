@@ -1,2 +1,2 @@
-id1 * id3 + id2 )
+id1 * id3 + id2
 
