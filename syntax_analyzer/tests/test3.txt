@@ -1,8 +1,0 @@
-bool is_bool = true;
-forr(int i = 0; i < n; i++){
-	if(is_bool){
-		print("true");
-		is_bool = flase;
-		break;
-	}
-}

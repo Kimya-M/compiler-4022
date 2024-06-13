@@ -61,13 +61,11 @@ def remove_left_recursion(grammar):
             for production in grammar_copy[A_i]:
                 if production[0] == A_j:
                     for Aj_production in grammar_copy[A_j]:
-                        new_productions.append(Aj_production + production[len(A_j):])
+                        new_productions.append(Aj_production + production[1:])
                 else:
                     new_productions.append(production)
 
                 grammar_copy[A_i] = new_productions
-
-        # print("now",A_i)
         immediate_left_recursion_removed = remove_immediate_left_recursion(A_i, grammar_copy[A_i])
         # print("this:",immediate_left_recursion_removed)
         grammar_copy.update(immediate_left_recursion_removed)

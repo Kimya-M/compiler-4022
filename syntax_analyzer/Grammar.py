@@ -26,13 +26,14 @@ GRAMMAR = {
     "ParameterList": [["Type", "t_id", "ParameterList'"]],
     "ParameterList'": [["t_comma", "Type", "t_id", "Array", "ParameterList'"], ["ε"]],
 
-    "Statement": [["CompoundStmt", "Statement"], ["SimpleStmt", "Statement"], ["IfStmt", "Statement"],
-                  ["LoopStmt", "Statement"], ["PrintStmt", "Statement"], ["BreakStmt", "Statement"],
-                  ["ReturnStmt", "Statement"], ["ContinueStmt", "Statement"], ["VardecStmt", "Statement"],
-                  ["ε"]
+    "Statement": [["CompoundStmt"], ["SimpleStmt"], ["IfStmt"],
+                  ["LoopStmt"], ["PrintStmt"], ["BreakStmt"],
+                  ["ReturnStmt"], ["ContinueStmt"], ["VardecStmt"]
                 ],
 
-    "CompoundStmt": [["t_lc", "Statement", "t_rc"]],
+
+    "CompoundStmt": [["t_lc", "StatementList", "t_rc"]],
+    "StatementList" :[["Statement","StatementList"],["ε"]],
 
     "IfStmt": [["t_if", "Expression", "CompoundStmt", "ElseStmt"]],
     "ElseStmt": [["t_else", "CompoundStmt"], ["ε"]],
@@ -40,11 +41,12 @@ GRAMMAR = {
     "LoopStmt": [["t_for", "t_lp", "ForStmt", "t_rp"]],
     "ForStmt": [["LoopVardec", "t_semicolon", "LoopExpr", "t_semicolon", "LoopStep"]],
 
-    "LoopVardec": [["Type", "t_id", "t_assign", "t_decimal"], ["t_id", "t_assign", "t_decimal"], ["ε"]],
+    "LoopVardec": [["Type", "t_id", "t_assign", "Expression"], ["t_id", "t_assign", "Expression"], ["ε"]],
     "LoopExpr": [["Expression"], ["ε"]],
-    "LoopStep": [["Expression"], ["ε"]],
+    "LoopStep": [["SimpleStmt2"], ["ε"]],
 
     "SimpleStmt": [["t_id", "Array2", "t_assign", "Expression", "t_semicolon"]],
+    "SimpleStmt2": [["t_id", "Array2", "t_assign", "Expression"]],
     "Array2": [["t_lb", "Arraysize2", "t_rb"], ["ε"]],
     "Arraysize2": [["Expression"]],
 
@@ -68,8 +70,7 @@ GRAMMAR = {
     "AndExp": [["NotExp", "And"]],
     "And": [["t_lop_and", "NotExp", "And"], ["ε"]],
 
-    "NotExp": [["CompExp", "Not"]],
-    "Not": [["t_lop_not", "CompExp", "Not"], ["ε"]],
+    "NotExp": [["t_lop_not","NotExp"],["CompExp"]],
 
     "CompExp": [["Expr", "Comp"]],
     "Comp": [["Comp_OP", "Expr", "Comp"], ["ε"]],
@@ -84,5 +85,15 @@ GRAMMAR = {
 
     "Factor": [["t_aop_pl", "Atom"], ["t_aop_mn", "Atom"], ["Atom"]],
 
-    "Atom": [["t_id"], ["t_decimal"], ["t_hexadecimal"], ["t_string"], ["t_character"], ["t_true"], ["t_false"]]
+    "Atom": [["t_id", "IsFunction"], ["t_decimal"], ["t_hexadecimal"],
+             ["t_string"], ["t_char"], ["t_true"], ["t_false"],
+             ["t_lp", "Expression", "t_rp"]],
+    
+    "IsFunction": [["ε"], ["t_lp", "Parameters2", "t_rp"]],
+
+    "Parameters2" : [["ParameterList2"], ["ε"]],
+
+    "ParameterList2": [["t_id", "ParameterList2'"]],
+
+    "ParameterList2'": [["t_comma", "t_id", "Array", "ParameterList2'"], ["ε"]]
 }

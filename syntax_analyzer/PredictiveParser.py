@@ -22,6 +22,10 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
         print(f"Stack: {stack}")
         print(f"{bcolors.OKCYAN}Current Token: {current_token}{bcolors.ENDC}")
 
+        # print(f"-----------")
+        # print(f"Stack: {stack}")
+        # print(f"Current Token: {current_token}")
+
         top = stack[-1]
         if stack != ["$"] and pop_node_stack:
             current_node = parent_stack.pop()
@@ -42,17 +46,23 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
         if top == current_token_name:
             stack.pop()
             current_token = next(token_generator)
-            Node(current_token_value, parent=current_node)
+            if current_token_value != None:
+                Node(current_token_value, parent=current_node)
 
-            print(f"{bcolors.OKGREEN}Matched Token: {current_token_name.upper()}, Value: {current_token_value}{bcolors.ENDC}")
+            # print(f"{bcolors.OKGREEN}Matched Token: {current_token_name.upper()}, Value: {current_token_value}{bcolors.ENDC}")
+            print(f"Matched Token: {current_token_name.upper()}, Value: {current_token_value}")
         elif top[0].isupper():
             if top in parsing_table.keys() and current_token_name in parsing_table[top].keys():
-                production = parsing_table[top][current_token_name][0]
+                if parsing_table[top][current_token_name] != "synch":
+                    production = parsing_table[top][current_token_name][0]
+                else:
+                    production = parsing_table[top][current_token_name]
 
-                print(f"{bcolors.WARNING}Action: {top} -> {production}{bcolors.ENDC}")
+                # print(f"{bcolors.WARNING}Action: {top} -> {production}{bcolors.ENDC}")
+                print(f"Action: {top} -> {production}")
 
                 if production == "synch":
-                    print(f"{bcolors.FAIL}Syntax Error at line #{current_token_line}, Illegal {current_token_name}{bcolors.ENDC}")
+                    print(f"{bcolors.OKGREEN}Synched{bcolors.ENDC}")
                     stack.pop()
                 elif production != ['ε']:
                     stack.pop()
@@ -67,6 +77,7 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
             else:
                 print(f"{bcolors.FAIL}Syntax Error at line #{current_token_line}, Extra token: {current_token_name}{bcolors.ENDC}")
                 print("M[A, a] is empty, Discarding Token...")
+                print(f"M[{top}, {current_token_name}]")
                 current_token = next(token_generator)
                 pop_node_stack = False
 

@@ -20,6 +20,8 @@ from Grammar import GRAMMAR, START_SYMBOL
 if __name__ == "__main__":
     start_symbol = START_SYMBOL
 
+    print(GRAMMAR["ParameterList"])
+
     print(f"{bcolors.OKBLUE}The Grammar after removing left recursion:{bcolors.ENDC}")
     no_left_recursion_grammar = remove_left_recursion(GRAMMAR)
     print_grammar(no_left_recursion_grammar)
@@ -45,11 +47,11 @@ if __name__ == "__main__":
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
     parsing_table = create_parsing_table(no_left_factor_grammar, start_symbol)
-    # print_parsing_table(parsing_table)
-    pretty_print_parsing_table(parsing_table)
+    print_parsing_table(parsing_table)
+    # pretty_print_parsing_table(parsing_table)
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
     print(f"{bcolors.OKBLUE}Parse Tree:{bcolors.ENDC}")
     tree_root = predictive_parser(parsing_table, start_symbol)
 
-    print_parse_tree(tree_root)
+    # print_parse_tree(tree_root)

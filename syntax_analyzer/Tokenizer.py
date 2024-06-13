@@ -129,7 +129,7 @@ def is_operator(token: str):
         return True, "/"
     elif token[0] == '%':
         return True, "%"
-    elif token[0:1] == "&&":
+    elif ord(token[0]) == 38 and ord(token[1]) == 38:
         return True, "&&"
     elif ord(token[0]) == 124 and ord(token[1]) == 124:
         return True, "||"

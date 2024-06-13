@@ -76,11 +76,11 @@ def pretty_print_parsing_table(parsing_table):
                     print(f"{bcolors.OKCYAN}{nonterminal} -> {prod}{bcolors.ENDC}", end=" ")
             else:
                 print(f"{bcolors.OKCYAN}{production}{bcolors.ENDC}", end=" ")
-            print(f"{bcolors.BOLD}| {bcolors.ENDC}", end="")
+            print(f"{bcolors.BOLD}||| {bcolors.ENDC}", end="")
             if len(production) > 1 and production != "synch":
                 print(f"{bcolors.FAIL}\nWARNING: The Grammar is Ambiguous!{bcolors.ENDC}")
                 print(f"{bcolors.WARNING}The previous entry in the parsing table has more than one element.{bcolors.ENDC}")
-        print()
+        print("\n===============================================")
 
 
 if __name__ == "__main__":
