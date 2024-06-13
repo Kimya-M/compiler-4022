@@ -26,7 +26,11 @@ GRAMMAR = {
     "ParameterList": [["Type", "t_id", "ParameterList'"]],
     "ParameterList'": [["t_comma", "Type", "t_id", "Array", "ParameterList'"], ["ε"]],
 
-    "Statement": [["CompoundStmt", "Statement"], ["SimpleStmt", "Statement"], ["IfStmt", "Statement"], ["LoopStmt", "Statement"], ["PrintStmt", "Statement"], ["BreakStmt", "Statement"], ["ReturnStmt", "Statement"], ["ContinueStmt", "Statement"], ["VardecStmt", "Statement"], ["ε"]],
+    "Statement": [["CompoundStmt", "Statement"], ["SimpleStmt", "Statement"], ["IfStmt", "Statement"],
+                  ["LoopStmt", "Statement"], ["PrintStmt", "Statement"], ["BreakStmt", "Statement"],
+                  ["ReturnStmt", "Statement"], ["ContinueStmt", "Statement"], ["VardecStmt", "Statement"],
+                  ["ε"]
+                ],
 
     "CompoundStmt": [["t_lc", "Statement", "t_rc"]],
 

@@ -86,9 +86,27 @@ def print_follow_sets(grammar: dict, start_symbol: str):
 
 if __name__ == "__main__":
     # Example grammar to test
+    # grammar = {
+    #     "S": ["iEtS", "iEtSeS", "a"],
+    #     "E": ["b"]
+    # }
+
     grammar = {
-        "S": ["iEtS", "iEtSeS", "a"],
-        "E": ["b"]
+        "S": [["a", "A", "b"], ["b", "B", "a"]],
+        "A": [["c", "S"], ["ε"]],
+        "B": [["d", "S"], ["ε"]]
+    }
+
+    grammar = {
+        "S": [["0", "S", "1"], ["0", "1"]],
+    }
+
+    grammar = {
+        "S": [["+", "S", "S"], ["*", "S", "S"], ["a"]],
+    }
+
+    grammar = {
+        "S": [["S", "(", "S", ")", "S"], ["a"]],
     }
 
     start_symbol = "S"
