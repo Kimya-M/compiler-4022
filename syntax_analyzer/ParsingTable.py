@@ -2,7 +2,7 @@ from Fcal import compute_first, compute_follow
 from TerminalColors import bcolors
 
 
-def create_parsing_table(grammar: dict, start_symbol="S"):
+def create_parsing_table(grammar: dict, start_symbol):
     # Initialize the parsing table
     parsing_table = {nonterminal: {} for nonterminal in grammar}
     all_follow_set = compute_follow(grammar, start_symbol)
@@ -52,19 +52,41 @@ def compute_first_set(production, first):
 
 
 def print_parsing_table(parsing_table):
-    print("Parsing Table:")
+    with open("parsing_table.txt", "w") as f:
+        print("Parsing Table:")
+        for nonterminal, rules in parsing_table.items():
+            for terminal, production in rules.items():
+                print(f"{bcolors.WARNING}M[{nonterminal}, {terminal}]{bcolors.ENDC} = {bcolors.OKCYAN}{production}{bcolors.ENDC}")
+                f.write(f"M[{nonterminal}, {terminal}] = {production}\n")
+                if len(production) > 1 and production != "synch":
+                    print(f"{bcolors.FAIL}WARNING: The Grammar is Ambiguous!{bcolors.ENDC}")
+                    print(f"{bcolors.WARNING}The previous entry in the parsing table has more than one element.{bcolors.ENDC}")
+                    f.write(f"WARNING: The Grammar is Ambiguous!\n")
+                    f.write(f"The previous entry in the parsing table has more than one element.\n")
+
+
+def pretty_print_parsing_table(parsing_table):
+    print(f"{bcolors.OKBLUE}Parsing Table:{bcolors.ENDC}")
     for nonterminal, rules in parsing_table.items():
         for terminal, production in rules.items():
-            print(f"M[{nonterminal}, {terminal}] = {production}")
+            print(f"{bcolors.WARNING}M[{nonterminal}, {terminal}]: {bcolors.ENDC}", end="")
+
+            if production != "synch":
+                for prod in production:
+                    print(f"{bcolors.OKCYAN}{nonterminal} -> {prod}{bcolors.ENDC}", end=" ")
+            else:
+                print(f"{bcolors.OKCYAN}{production}{bcolors.ENDC}", end=" ")
+            print(f"{bcolors.BOLD}| {bcolors.ENDC}", end="")
             if len(production) > 1 and production != "synch":
-                print(f"{bcolors.FAIL}WARNING: The Grammar is Ambiguous!{bcolors.ENDC}")
+                print(f"{bcolors.FAIL}\nWARNING: The Grammar is Ambiguous!{bcolors.ENDC}")
                 print(f"{bcolors.WARNING}The previous entry in the parsing table has more than one element.{bcolors.ENDC}")
+        print()
 
 
 if __name__ == "__main__":
     # grammar = {
     #     "E": [["E", "+", "T"], ["T"]],
-    #     "E": [["T", "*", "F"], ["F"]],
+    #     "T": [["T", "*", "F"], ["F"]],
     #     "F": [["(", "E", ")"], ["id"]],
     # }
 
@@ -76,15 +98,15 @@ if __name__ == "__main__":
     #     "F": [["(", "E", ")"], ["id"]],
     # }
 
-    grammar = {
-        "A": [["if", "expr", "then", "A"], ["if", "expr", "then", "A", "else", "A"], ["other"]]
-    }
-
     # grammar = {
-    #     "S": [["i", "E", "t", "S", "S'"], ["a"]],
-    #     "S'": [["e", "S"], ["ε"]],
-    #     "E": [["b"]],
+    #     "A": [["if", "expr", "then", "A"], ["if", "expr", "then", "A", "else", "A"], ["other"]]
     # }
 
-    parsing_table = create_parsing_table(grammar, start_symbol="A")
-    print_parsing_table(parsing_table)
+    grammar = {
+        "S": [["i", "E", "t", "S", "S'"], ["a"]],
+        "S'": [["e", "S"], ["ε"]],
+        "E": [["b"]],
+    }
+
+    parsing_table = create_parsing_table(grammar, start_symbol="S")
+    pretty_print_parsing_table(parsing_table)

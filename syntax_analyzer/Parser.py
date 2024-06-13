@@ -2,7 +2,7 @@ from LeftRecursion import remove_left_recursion, print_grammar
 from LeftFactoring import left_factor
 from CheckLL1 import is_LL1
 from Fcal import print_first_sets, print_follow_sets
-from ParsingTable import create_parsing_table, print_parsing_table
+from ParsingTable import create_parsing_table, print_parsing_table, pretty_print_parsing_table
 from PredictiveParser import predictive_parser, print_parse_tree
 from TerminalColors import bcolors
 from Grammar import GRAMMAR, START_SYMBOL
@@ -45,7 +45,8 @@ if __name__ == "__main__":
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
     parsing_table = create_parsing_table(no_left_factor_grammar, start_symbol)
-    print_parsing_table(parsing_table)
+    # print_parsing_table(parsing_table)
+    pretty_print_parsing_table(parsing_table)
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
     print(f"{bcolors.OKBLUE}Parse Tree:{bcolors.ENDC}")

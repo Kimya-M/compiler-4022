@@ -1,0 +1,102 @@
+Program => Declist
+
+Declist => Dec Declist'
+Declist' => Dec Declist'|ε
+
+Dec => Type <T_ID> Declaration
+Declaration=> Vardec|Funcdec
+
+Type => <T_Int>|<T_Bool>|<T_Char>
+_________________________________________________________________________
+
+###Variable Declaration!###
+
+Vardec => Vardeclist <T_Semicolon>
+Vardeclist => VardecInit Vardeclist'
+Vardeclist' => <T_Comma> <T_ID> VardecInit Vardeclist'|ε
+
+VardecInit => Array VardecInit'
+VardecInit' => <T_Assign> Expression|ε
+
+Array => <T_LB>Arraysize<T_RB>|ε
+Arraysize => Expression|ε
+
+__________________________________________________________________________
+
+###Function Declaration###
+
+Funcdec => <T_LP>Parameters<T_RP>Statement 
+Parameters => PrameterList|ε
+ParameterList => Type <T_ID> ParameterList'
+ParameterList' => <T_Comma> Type <T_ID> Array ParameterList'|ε
+
+__________________________________________________________________________
+
+###Statement!!###
+
+Statement => CompoundStmt Statement| SimpleStmt Statement|IfStmt Statement| LoopStmt Statement| PrintStmt Statement|BreakStmt Statement|ReturnStmt Statement|ContinueStmt Statement|VardecStmt Statement|ε
+
+CompoundStmt => <T_LC>statement<T_RC>
+
+IfStmt => <T_If> Expression CompoundStmt ElseStmt
+ElseStmt => <T_Else> CompoundStmt | ε
+
+LoopStmt => <T_For> <T_LP> ForStmt <T_RP>
+ForStmt => LoopVardec <T_Semicolon> LoopExpr <T_Semicolon> LoopStep 
+
+LoopVardec => Type <T_ID> <T_Assign> <T_Decimal>| <T_ID> <T_Assign> <T_Decimal> | ε
+LoopExpr => Experssion | ε
+LoopStep => Experssion | ε
+
+SimpleStmt => <T_ID> Array2 <T_Assign> Expression <T_Semicolon>
+Array2 => <T_LB>Arraysize2<T_RB>|ε
+Arraysize2 => Expression
+
+VardecStmt => Type <T_ID> Vardeclist <T_Semicolon>
+
+ReturnStmt => <T_Return> <T_Semicolon> | <T_Return> Experssion <T_Semicolon>
+
+BreakStmt => <T_Break> <T_Semicolon>
+
+ContinueStmt => <T_Continue> <T_Semicolon>
+
+PrintStmt => <T_Print> <T_LP> PrintRules <T_RP> <T_Semicolon>
+PrintRules => Expresssion PrintList
+PrintList => <T_Comma> Expresssion PrintList|ε
+
+_____________________________________________________________________________
+
+
+###EXPRESSIONS!###
+
+Experssion => OrExp 
+
+OrExp => AndExp Or
+Or => <T_ⅬOp_OR> AndExp Or|ε
+
+AndExp => NotExp And
+And => <T_LOp_AND> NotExp And|ε
+
+NotExp => CompExp Not 
+Not =>  <T_ⅬOp_NOT> CompExp Not|ε
+
+CompExp => Expr Comp
+Comp => Comp_OP Expr Comp|ε
+
+Comp_OP => <T_ROp_Ⅼ>|<T_ROp_G>|<T_ROp_ⅬE>|<T_ROp_GE>|<T_ROp_NE>|<T_ROp_E>
+
+Expr => Term Arth1
+Arth1 => <T_AOp_PⅬ> Term Arth1|<T_AOp_ⅯN> Term Arth1|ε
+
+Term => Factor Arth2
+Arth2 => <T_AOp_ⅯⅬ> Factor Arth2| <T_AOp_ⅮV> Factor Arth2| <T_AOp_RⅯ> Factor Arth2|ε
+
+Factor => <T_AOp_PⅬ> Atom | <T_AOp_ⅯN> Atom| Atom
+
+Atom => <T_ID>|<T_Decimal>|<T_Hexadecimal>|<T_String>|<T_Character>|<T_True>|<T_False>
+
+
+
+
+
+
