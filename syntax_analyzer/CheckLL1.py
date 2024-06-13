@@ -8,6 +8,7 @@ def is_LL1(grammar: dict, start_symbol: str):
         print(e)
         return False
 
+    is_ll1 = True
     for nonterminal, productions in grammar.items():
         for i in range(len(productions)):
             for j in range(i + 1, len(productions)):
@@ -22,7 +23,7 @@ def is_LL1(grammar: dict, start_symbol: str):
                     print("First(alpha) and First(beta) are not disjoint")
                     print(f"alpha: {nonterminal} -> {alpha}, beta: {nonterminal} -> {beta}")
                     print(f"first(alpha): {first_alpha}, first(beta): {first_beta}")
-                    # return False
+                    is_ll1 = False
 
                 # Check if epsilon is in First(beta) and First(alpha) intersect Follow(A) is not empty
                 if 'ε' in first_beta:
@@ -30,7 +31,7 @@ def is_LL1(grammar: dict, start_symbol: str):
                         print("First(alpha) intersect Follow(A) is not empty")
                         print(f"alpha: {nonterminal} -> {alpha}, beta: {nonterminal} -> {beta}")
                         print(f"first(alpha): {first_alpha}, follow(A): {all_follow_set[nonterminal]}")
-                        # return False
+                        is_ll1 = False
 
                 # Check if epsilon is in First(alpha) and First(beta) intersect Follow(A) is not empty
                 if 'ε' in first_alpha:
@@ -38,9 +39,8 @@ def is_LL1(grammar: dict, start_symbol: str):
                         print("First(beta) intersect Follow(A) is not empty")
                         print(f"beta: {nonterminal} -> {beta}")
                         print(f"follow(A): {all_follow_set[nonterminal]}, first(beta): {first_beta}")
-                        # return False
-
-    return True
+                        is_ll1 = False
+    return is_ll1
 
 
 if __name__ == "__main__":

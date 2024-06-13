@@ -4,11 +4,11 @@ def compute_first(grammar):
     for nonterminal in grammar:
         for production in grammar[nonterminal]:
             for symbol in production:
-                if not symbol.isupper():
+                if not symbol[0].isupper():
                     first[symbol] = {symbol}
 
     def first_of(symbol):
-        if not symbol.isupper():
+        if not symbol[0].isupper():
             return first[symbol]
         if not first[symbol]:
             for production in grammar[symbol]:
@@ -40,7 +40,7 @@ def compute_follow(grammar, start_symbol):
             for production in productions:
                 # print("the production:", production)
                 for symbol in range(len(production)):
-                    if not production[symbol].isupper():
+                    if not production[symbol][0].isupper():
                         # print(production[symbol], "this isn't a non terminal")
                         continue
                     before_change = len(follow[production[symbol]])
@@ -50,7 +50,7 @@ def compute_follow(grammar, start_symbol):
                         # print("0",production[symbol], production, follow[production[symbol]])
                     else:
                         if 'ε' in first[production[symbol + 1]]:
-                            if not production[symbol + 1].isupper():
+                            if not production[symbol + 1][0].isupper():
                                 follow[production[symbol]] |= production[symbol + 1]
                                 # print("1",production[symbol], production, follow[production[symbol]])
                             else:
@@ -72,7 +72,7 @@ def print_first_sets(grammar: dict):
     better_first_set = {}
 
     for non_terminal, productions in first_sets.items():
-        if non_terminal.isupper():
+        if non_terminal[0].isupper():
             print(f"First set {non_terminal} : {productions}")
             better_first_set[non_terminal] = productions
 

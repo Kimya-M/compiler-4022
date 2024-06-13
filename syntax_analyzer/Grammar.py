@@ -1,84 +1,84 @@
-START_SYMBOL = "PROGRAM"
+START_SYMBOL = "Program"
 
 GRAMMAR = {
-    "PROGRAM": [["DECLIST"]],
+    "Program": [["Declist"]],
 
-    "DECLIST": [["DEC", "DECLIST'"]],
-    "DECLIST'": [["DEC", "DECLIST'"], ["ε"]],
+    "Declist": [["Dec", "Declist'"]],
+    "Declist'": [["Dec", "Declist'"], ["ε"]],
 
-    "DEC": [["TYPE", "t_id", "DECLARATION"]],
-    "DECLARATION": [["VARDEC"], ["FUNCDEC"]],
+    "Dec": [["Type", "t_id", "Declaration"]],
+    "Declaration": [["Vardec"], ["Funcdec"]],
 
-    "TYPE": [["t_int"], ["t_bool"], ["t_char"]],
+    "Type": [["t_int"], ["t_bool"], ["t_char"]],
 
-    "VARDEC": [["VARDECLIST", "t_semicolon"]],
-    "VARDECLIST": [["VARDECINIT", "VARDECLIST'"]],
-    "VARDECLIST'": [["t_comma", "t_id", "VARDECINIT", "VARDECLIST'"], ["ε"]],
+    "Vardec": [["Vardeclist", "t_semicolon"]],
+    "Vardeclist": [["VardecInit", "Vardeclist'"]],
+    "Vardeclist'": [["t_comma", "t_id", "VardecInit", "Vardeclist'"], ["ε"]],
 
-    "VARDECINIT": [["ARRAY", "VARDECINIT'"]],
-    "VARDECINIT'": [["t_assign", "EXPRESSION"], ["ε"]],
+    "VardecInit": [["Array", "VardecInit'"]],
+    "VardecInit'": [["t_assign", "Expression"], ["ε"]],
 
-    "ARRAY": [["t_lb", "ARRAYSIZE", "t_rb"], ["ε"]],
-    "ARRAYSIZE": [["EXPRESSION"], ["ε"]],
+    "Array": [["t_lb", "Arraysize", "t_rb"], ["ε"]],
+    "Arraysize": [["Expression"], ["ε"]],
 
-    "FUNCDEC": [["t_lp", "PARAMETERS", "t_rp", "STATEMENT"]],
-    "PARAMETERS": [["PARAMETERLIST"], ["ε"]],
-    "PARAMETERLIST": [["TYPE", "t_id", "PARAMETERLIST'"]],
-    "PARAMETERLIST'": [["t_comma", "TYPE", "t_id", "ARRAY", "PARAMETERLIST'"], ["ε"]],
+    "Funcdec": [["t_lp", "Parameters", "t_rp", "Statement"]],
+    "Parameters": [["ParameterList"], ["ε"]],
+    "ParameterList": [["Type", "t_id", "ParameterList'"]],
+    "ParameterList'": [["t_comma", "Type", "t_id", "Array", "ParameterList'"], ["ε"]],
 
-    "STATEMENT": [["COMPOUNDSTMT", "STATEMENT"], ["SIMPLESTMT", "STATEMENT"], ["IFSTMT", "STATEMENT"], ["LOOPSTMT", "STATEMENT"], ["PRINTSTMT", "STATEMENT"], ["BREAKSTMT", "STATEMENT"], ["RETURNSTMT", "STATEMENT"], ["CONTINUESTMT", "STATEMENT"], ["VARDECSTMT", "STATEMENT"], ["ε"]],
+    "Statement": [["CompoundStmt", "Statement"], ["SimpleStmt", "Statement"], ["IfStmt", "Statement"], ["LoopStmt", "Statement"], ["PrintStmt", "Statement"], ["BreakStmt", "Statement"], ["ReturnStmt", "Statement"], ["ContinueStmt", "Statement"], ["VardecStmt", "Statement"], ["ε"]],
 
-    "COMPOUNDSTMT": [["t_lc", "statement", "t_rc"]],
+    "CompoundStmt": [["t_lc", "statement", "t_rc"]],
 
-    "IFSTMT": [["t_if", "EXPRESSION", "COMPOUNDSTMT", "ELSESTMT"]],
-    "ELSESTMT": [["t_else", "COMPOUNDSTMT"], ["ε"]],
+    "IfStmt": [["t_if", "Expression", "CompoundStmt", "ElseStmt"]],
+    "ElseStmt": [["t_else", "CompoundStmt"], ["ε"]],
 
-    "LOOPSTMT": [["t_for", "t_lp", "FORSTMT", "t_rp"]],
-    "FORSTMT": [["LOOPVARDEC", "t_semicolon", "LOOPEXPR", "t_semicolon", "LOOPSTEP"]],
+    "LoopStmt": [["t_for", "t_lp", "ForStmt", "t_rp"]],
+    "ForStmt": [["LoopVardec", "t_semicolon", "LoopExpr", "t_semicolon", "LoopStep"]],
 
-    "LOOPVARDEC": [["TYPE", "t_id", "t_assign", "t_decimal"], ["t_id", "t_assign", "t_decimal"], ["ε"]],
-    "LOOPEXPR": [["EXPRESSION"], ["ε"]],
-    "LOOPSTEP": [["EXPRESSION"], ["ε"]],
+    "LoopVardec": [["Type", "t_id", "t_assign", "t_decimal"], ["t_id", "t_assign", "t_decimal"], ["ε"]],
+    "LoopExpr": [["Expression"], ["ε"]],
+    "LoopStep": [["Expression"], ["ε"]],
 
-    "SIMPLESTMT": [["t_id", "ARRAY2", "t_assign", "EXPRESSION", "t_semicolon"]],
-    "ARRAY2": [["t_lb", "ARRAYSIZE2", "t_rb"], ["ε"]],
-    "ARRAYSIZE2": [["EXPRESSION"]],
+    "SimpleStmt": [["t_id", "Array2", "t_assign", "Expression", "t_semicolon"]],
+    "Array2": [["t_lb", "Arraysize2", "t_rb"], ["ε"]],
+    "Arraysize2": [["Expression"]],
 
-    "VARDECSTMT": [["TYPE", "t_id", "VARDECLIST", "t_semicolon"]],
+    "VardecStmt": [["Type", "t_id", "Vardeclist", "t_semicolon"]],
 
-    "RETURNSTMT": [["t_return", "t_semicolon"], ["t_return", "EXPRESSION", "t_semicolon"]],
+    "ReturnStmt": [["t_return", "t_semicolon"], ["t_return", "Expression", "t_semicolon"]],
 
-    "BREAKSTMT": [["t_break", "t_semicolon"]],
+    "BreakStmt": [["t_break", "t_semicolon"]],
 
-    "CONTINUESTMT": [["t_continue", "t_semicolon"]],
+    "ContinueStmt": [["t_continue", "t_semicolon"]],
 
-    "PRINTSTMT": [["t_print", "t_lp", "PRINTRULES", "t_rp", "t_semicolon"]],
-    "PRINTRULES": [["EXPRESSION", "PRINTLIST"]],
-    "PRINTLIST": [["t_comma", "EXPRESSION", "PRINTLIST"], ["ε"]],
+    "PrintStmt": [["t_print", "t_lp", "PrintRules", "t_rp", "t_semicolon"]],
+    "PrintRules": [["Expression", "PrintList"]],
+    "PrintList": [["t_comma", "Expression", "PrintList"], ["ε"]],
 
-    "EXPRESSION": [["OREXP"]],
+    "Expression": [["OrExp"]],
 
-    "OREXP": [["ANDEXP", "OR"]],
-    "OR": [["t_lop_or", "ANDEXP", "OR"], ["ε"]],
+    "OrExp": [["AndExp", "Or"]],
+    "Or": [["t_lop_or", "AndExp", "Or"], ["ε"]],
 
-    "ANDEXP": [["NOTEXP", "AND"]],
-    "AND": [["t_lop_and", "NOTEXP", "AND"], ["ε"]],
+    "AndExp": [["NotExp", "And"]],
+    "And": [["t_lop_and", "NotExp", "And"], ["ε"]],
 
-    "NOTEXP": [["COMPEXP", "NOT"]],
-    "NOT": [["t_lop_not", "COMPEXP", "NOT"], ["ε"]],
+    "NotExp": [["CompExp", "Not"]],
+    "Not": [["t_lop_not", "CompExp", "Not"], ["ε"]],
 
-    "COMPEXP": [["EXPR", "COMP"]],
-    "COMP": [["COMP_OP", "EXPR", "COMP"], ["ε"]],
+    "CompExp": [["Expr", "Comp"]],
+    "Comp": [["Comp_OP", "Expr", "Comp"], ["ε"]],
 
-    "COMP_OP": [["t_rop_l"], ["t_rop_g"], ["t_rop_le"], ["t_rop_ge"], ["t_rop_ne"], ["t_rop_e"]],
+    "Comp_OP": [["t_rop_l"], ["t_rop_g"], ["t_rop_le"], ["t_rop_ge"], ["t_rop_ne"], ["t_rop_e"]],
 
-    "EXPR": [["TERM", "ARTH1"]],
-    "ARTH1": [["t_aop_pl", "TERM", "ARTH1"], ["t_aop_mn", "TERM", "ARTH1"], ["ε"]],
+    "Expr": [["Term", "Arth1"]],
+    "Arth1": [["t_aop_pl", "Term", "Arth1"], ["t_aop_mn", "Term", "Arth1"], ["ε"]],
 
-    "TERM": [["FACTOR", "ARTH2"]],
-    "ARTH2": [["t_aop_ml", "FACTOR", "ARTH2"], ["t_aop_dv", "FACTOR", "ARTH2"], ["t_aop_rm", "FACTOR", "ARTH2"], ["ε"]],
+    "Term": [["Factor", "Arth2"]],
+    "Arth2": [["t_aop_ml", "Factor", "Arth2"], ["t_aop_dv", "Factor", "Arth2"], ["t_aop_rm", "Factor", "Arth2"], ["ε"]],
 
-    "FACTOR": [["t_aop_pl", "ATOM"], ["t_aop_mn", "ATOM"], ["ATOM"]],
+    "Factor": [["t_aop_pl", "Atom"], ["t_aop_mn", "Atom"], ["Atom"]],
 
-    "ATOM": [["t_id"], ["t_decimal"], ["t_hexadecimal"], ["t_string"], ["t_character"], ["t_true"], ["t_false"]]
+    "Atom": [["t_id"], ["t_decimal"], ["t_hexadecimal"], ["t_string"], ["t_character"], ["t_true"], ["t_false"]]
 }

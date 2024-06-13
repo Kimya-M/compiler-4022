@@ -1,4 +1,5 @@
 from Fcal import compute_first, compute_follow
+from TerminalColors import bcolors
 
 
 def create_parsing_table(grammar: dict, start_symbol="S"):
@@ -13,12 +14,17 @@ def create_parsing_table(grammar: dict, start_symbol="S"):
 
             for first_terminal in first_set:
                 if first_terminal != 'ε':
-                    parsing_table[nonterminal][first_terminal] = production
+                    if first_terminal not in parsing_table[nonterminal].keys():
+                        parsing_table[nonterminal][first_terminal] = []
+                    parsing_table[nonterminal][first_terminal].append(production)
                 else:
                     for terminal in all_follow_set[nonterminal]:
-                        parsing_table[nonterminal][terminal] = production
-                        if '$' in all_follow_set[nonterminal]:
-                            parsing_table[nonterminal]['$'] = production
+                        if terminal not in parsing_table[nonterminal].keys():
+                            parsing_table[nonterminal][terminal] = []
+                        parsing_table[nonterminal][terminal].append(production)
+                        if "$" in all_follow_set[nonterminal]:
+                            parsing_table[nonterminal]["$"] = []
+                            parsing_table[nonterminal]["$"].append(production)
 
     # Add synchronizing tokens for error handling
     for nonterminal, follow_set in all_follow_set.items():
@@ -50,6 +56,9 @@ def print_parsing_table(parsing_table):
     for nonterminal, rules in parsing_table.items():
         for terminal, production in rules.items():
             print(f"M[{nonterminal}, {terminal}] = {production}")
+            if len(production) > 1 and production != "synch":
+                print(f"{bcolors.FAIL}WARNING: The Grammar is Ambiguous!{bcolors.ENDC}")
+                print(f"{bcolors.WARNING}The previous entry in the parsing table has more than one element.{bcolors.ENDC}")
 
 
 if __name__ == "__main__":
@@ -59,13 +68,23 @@ if __name__ == "__main__":
     #     "F": [["(", "E", ")"], ["id"]],
     # }
 
+    # grammar = {
+    #     "E": [["T", "E'"]],
+    #     "E'": [["+", "T", "E'"], ["ε"]],
+    #     "T": [["F", "T'"]],
+    #     "T'": [["*", "F", "T'"], ["ε"]],
+    #     "F": [["(", "E", ")"], ["id"]],
+    # }
+
     grammar = {
-        "E": [["T", "E'"]],
-        "E'": [["+", "T", "E'"], ["ε"]],
-        "T": [["F", "T'"]],
-        "T'": [["*", "F", "T'"], ["ε"]],
-        "F": [["(", "E", ")"], ["id"]],
+        "A": [["if", "expr", "then", "A"], ["if", "expr", "then", "A", "else", "A"], ["other"]]
     }
 
-    parsing_table = create_parsing_table(grammar, start_symbol="E")
+    # grammar = {
+    #     "S": [["i", "E", "t", "S", "S'"], ["a"]],
+    #     "S'": [["e", "S"], ["ε"]],
+    #     "E": [["b"]],
+    # }
+
+    parsing_table = create_parsing_table(grammar, start_symbol="A")
     print_parsing_table(parsing_table)

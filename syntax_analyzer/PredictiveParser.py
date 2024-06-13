@@ -1,5 +1,6 @@
 from Tokenizer import get_tokens
-from anytree import Node, RenderTree
+from TerminalColors import bcolors
+from anytree import Node, RenderTree, ContRoundStyle
 
 
 def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node:
@@ -12,14 +13,14 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
 
     while stack:
         if current_token != "$":
-            while current_token.name == "T_Whitespace".lower():
+            while current_token.name == "t_whitespace" or current_token.name == "t_comment":
                 current_token = next(token_generator)
                 if current_token == "$":
                     break
 
-        print("-----------")
+        print(f"{bcolors.BOLD}-----------{bcolors.ENDC}")
         print(f"Stack: {stack}")
-        print(f"Current Token: {current_token}")
+        print(f"{bcolors.OKCYAN}Current Token: {current_token}{bcolors.ENDC}")
 
         top = stack[-1]
         if stack != ["$"] and pop_node_stack:
@@ -43,15 +44,15 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
             current_token = next(token_generator)
             Node(current_token_value, parent=current_node)
 
-            print(f"Matched Token: {current_token_name.upper()}, Value: {current_token_value}")
-        elif top.isupper():
+            print(f"{bcolors.OKGREEN}Matched Token: {current_token_name.upper()}, Value: {current_token_value}{bcolors.ENDC}")
+        elif top[0].isupper():
             if top in parsing_table.keys() and current_token_name in parsing_table[top].keys():
-                production = parsing_table[top][current_token_name]
+                production = parsing_table[top][current_token_name][0]
 
-                print(f"Action: {top} -> {production}")
+                print(f"{bcolors.WARNING}Action: {top} -> {production}{bcolors.ENDC}")
 
                 if production == "synch":
-                    print(f"Syntax Error at line #{current_token_line}, Illegal {current_token_name}")
+                    print(f"{bcolors.FAIL}Syntax Error at line #{current_token_line}, Illegal {current_token_name}{bcolors.ENDC}")
                     stack.pop()
                 elif production != ['ε']:
                     stack.pop()
@@ -64,20 +65,20 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
                     child_node = Node("ε", parent=current_node)
                     stack.pop()
             else:
-                print(f"Syntax Error at line #{current_token_line}, Extra token: {current_token_name}")
+                print(f"{bcolors.FAIL}Syntax Error at line #{current_token_line}, Extra token: {current_token_name}{bcolors.ENDC}")
                 print("M[A, a] is empty, Discarding Token...")
                 current_token = next(token_generator)
                 pop_node_stack = False
 
         else:
             stack.pop()
-            print(f"Syntax Error at line #{current_token_line}, Extra: {current_token_name}")
+            print(f"{bcolors.FAIL}Syntax Error at line #{current_token_line}, Extra: {current_token_name}{bcolors.ENDC}")
 
     return root
 
 
 def print_parse_tree(root: Node):
-    for pre, fill, node in RenderTree(root):
+    for pre, fill, node in RenderTree(root, style=ContRoundStyle):
         print(f"{pre}{node.name}")
 
 
