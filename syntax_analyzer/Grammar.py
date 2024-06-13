@@ -28,7 +28,7 @@ GRAMMAR = {
 
     "Statement": [["CompoundStmt", "Statement"], ["SimpleStmt", "Statement"], ["IfStmt", "Statement"], ["LoopStmt", "Statement"], ["PrintStmt", "Statement"], ["BreakStmt", "Statement"], ["ReturnStmt", "Statement"], ["ContinueStmt", "Statement"], ["VardecStmt", "Statement"], ["ε"]],
 
-    "CompoundStmt": [["t_lc", "statement", "t_rc"]],
+    "CompoundStmt": [["t_lc", "Statement", "t_rc"]],
 
     "IfStmt": [["t_if", "Expression", "CompoundStmt", "ElseStmt"]],
     "ElseStmt": [["t_else", "CompoundStmt"], ["ε"]],
