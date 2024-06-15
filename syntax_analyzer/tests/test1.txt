@@ -1,13 +1,3 @@
-int test_function(int a, int b, bool c){
-	// this is a function
-	if (c == true){
-		return a+b;
-	}
-	else {
-		return a-b;
-	}
-}
-
 int main(){
 	bool add = true;
 	char _assign1 = '=';
@@ -30,7 +20,7 @@ int main(){
             }
 
 			if(j < -4 && i > 3) {
-				break;
+                break;
             }
 
 			print(i);

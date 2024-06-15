@@ -8,19 +8,8 @@ from TerminalColors import bcolors
 from Grammar import GRAMMAR, START_SYMBOL
 
 
-# GRAMMAR = {
-#         "E": [["E", "t_aop_pl", "T"], ["T"]],
-#         "T": [["T", "t_aop_ml", "F"], ["F"]],
-#         "F": [["t_lp", "E", "t_rp"], ["t_id"]],
-# }
-
-# START_SYMBOL = "E"
-
-
 if __name__ == "__main__":
     start_symbol = START_SYMBOL
-
-    print(GRAMMAR["ParameterList"])
 
     print(f"{bcolors.OKBLUE}The Grammar after removing left recursion:{bcolors.ENDC}")
     no_left_recursion_grammar = remove_left_recursion(GRAMMAR)
@@ -47,11 +36,11 @@ if __name__ == "__main__":
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
     parsing_table = create_parsing_table(no_left_factor_grammar, start_symbol)
-    print_parsing_table(parsing_table)
-    # pretty_print_parsing_table(parsing_table)
+    # print_parsing_table(parsing_table)
+    pretty_print_parsing_table(parsing_table)
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
-    print(f"{bcolors.OKBLUE}Parse Tree:{bcolors.ENDC}")
     tree_root = predictive_parser(parsing_table, start_symbol)
 
-    # print_parse_tree(tree_root)
+    print(f"{bcolors.OKBLUE}Parse Tree:{bcolors.ENDC}")
+    print_parse_tree(tree_root)

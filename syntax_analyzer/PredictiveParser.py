@@ -49,8 +49,8 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
             if current_token_value != None:
                 Node(current_token_value, parent=current_node)
 
-            # print(f"{bcolors.OKGREEN}Matched Token: {current_token_name.upper()}, Value: {current_token_value}{bcolors.ENDC}")
-            print(f"Matched Token: {current_token_name.upper()}, Value: {current_token_value}")
+            print(f"{bcolors.OKGREEN}Matched Token: {current_token_name.upper()}, Value: {current_token_value}{bcolors.ENDC}")
+            # print(f"Matched Token: {current_token_name.upper()}, Value: {current_token_value}")
         elif top[0].isupper():
             if top in parsing_table.keys() and current_token_name in parsing_table[top].keys():
                 if parsing_table[top][current_token_name] != "synch":
@@ -58,8 +58,8 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
                 else:
                     production = parsing_table[top][current_token_name]
 
-                # print(f"{bcolors.WARNING}Action: {top} -> {production}{bcolors.ENDC}")
-                print(f"Action: {top} -> {production}")
+                print(f"{bcolors.WARNING}Action: {top} -> {production}{bcolors.ENDC}")
+                # print(f"Action: {top} -> {production}")
 
                 if production == "synch":
                     print(f"{bcolors.OKGREEN}Synched{bcolors.ENDC}")
@@ -77,7 +77,7 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
             else:
                 print(f"{bcolors.FAIL}Syntax Error at line #{current_token_line}, Extra token: {current_token_name}{bcolors.ENDC}")
                 print("M[A, a] is empty, Discarding Token...")
-                print(f"M[{top}, {current_token_name}]")
+                # print(f"M[{top}, {current_token_name}]")
                 current_token = next(token_generator)
                 pop_node_stack = False
 
@@ -90,7 +90,14 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
 
 def print_parse_tree(root: Node):
     for pre, fill, node in RenderTree(root, style=ContRoundStyle):
-        print(f"{pre}{node.name}")
+        if node.name == "ε":
+            print(f"{pre}{bcolors.OKCYAN}{node.name}{bcolors.ENDC}")
+        elif node.name[0:2] == "T_":
+            print(f"{pre}{bcolors.OKGREEN}{node.name}{bcolors.ENDC}")
+        elif (ord(node.name[0]) >= 33 and ord(node.name[0]) <= 64) or (ord(node.name[0]) >= 91 and ord(node.name[0]) <= 125):
+            print(f"{pre}{bcolors.OKGREEN}{node.name}{bcolors.ENDC}")
+        else:
+            print(f"{pre}{node.name}")
 
 
 if __name__ == "__main__":
