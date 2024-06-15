@@ -45,8 +45,10 @@ GRAMMAR = {
     "LoopExpr": [["Expression"], ["ε"]],
     "LoopStep": [["SimpleStmt2"], ["ε"]],
 
-    "SimpleStmt": [["t_id", "Array2", "t_assign", "Expression", "t_semicolon"]],
-    "SimpleStmt2": [["t_id", "Array2", "t_assign", "Expression"]],
+    "SimpleStmt": [["t_id", "Array2", "SimpleStmt3", "t_semicolon"]],
+    "SimpleStmt2": [["t_id", "Array2", "SimpleStmt3" ]],
+    "SimpleStmt3":[["t_assign", "Expression"],["Expression"]],
+    
     "Array2": [["t_lb", "Arraysize2", "t_rb"], ["ε"]],
     "Arraysize2": [["Expression"]],
 
