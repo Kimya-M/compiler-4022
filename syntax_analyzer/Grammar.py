@@ -35,7 +35,7 @@ GRAMMAR = {
     "CompoundStmt": [["t_lc", "StatementList", "t_rc"]],
     "StatementList" :[["Statement","StatementList"],["ε"]],
 
-    "IfStmt": [["t_if", "Expression", "CompoundStmt", "ElseStmt"]],
+    "IfStmt": [["t_if","t_lp", "Expression", "t_rp", "CompoundStmt", "ElseStmt"]],
     "ElseStmt": [["t_else", "CompoundStmt"], ["ε"]],
 
     "LoopStmt": [["t_for", "t_lp", "ForStmt", "t_rp"]],
@@ -87,15 +87,14 @@ GRAMMAR = {
 
     "Factor": [["t_aop_pl", "Atom"], ["t_aop_mn", "Atom"], ["Atom"]],
 
-    "Atom": [["t_id", "IsFunction"], ["t_decimal"], ["t_hexadecimal"],
-             ["t_string"], ["t_char"], ["t_true"], ["t_false"],
-             ["t_lp", "Expression", "t_rp"]],
+    "Atom": [["t_id", "IsFunction"],["IsFunction"], ["t_decimal"], ["t_hexadecimal"],
+             ["t_string"], ["t_char"], ["t_true"], ["t_false"]],
     
     "IsFunction": [["ε"], ["t_lp", "Parameters2", "t_rp"]],
 
     "Parameters2" : [["ParameterList2"], ["ε"]],
 
-    "ParameterList2": [["t_id", "ParameterList2'"]],
+    "ParameterList2": [["Expression", "ParameterList2'"]],
 
-    "ParameterList2'": [["t_comma", "t_id", "Array", "ParameterList2'"], ["ε"]]
+    "ParameterList2'": [["t_comma", "Expression", "Array", "ParameterList2'"], ["ε"]]
 }

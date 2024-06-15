@@ -75,14 +75,8 @@ def is_hex(s: str):
 
 def is_comment(token: str):
     state = 0
-    for char in token:
-        if state == 0:
-            if char == "/":
-                state = 1
-        elif state == 1:
-            if char == "/":
-                state = 2
-        elif state == 2:
+    if token[0] == "/":
+        if token[1] == "/":
             return True
     return False
 
