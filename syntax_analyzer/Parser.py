@@ -36,7 +36,7 @@ if __name__ == "__main__":
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
     parsing_table = create_parsing_table(no_left_factor_grammar, start_symbol)
-    # print_parsing_table(parsing_table)
+    #print_parsing_table(parsing_table)
     pretty_print_parsing_table(parsing_table)
     print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 

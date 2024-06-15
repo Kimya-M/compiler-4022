@@ -1,7 +1,4 @@
-int main() {
-for (int i = 0; i < 10; i++)
-        printf("%d ", i);  // Error: Missing braces for loop body
-
-    // Infinite loop
-    int j = 0;
+int main(){
+    greet();
+    printNumber('5');
 }

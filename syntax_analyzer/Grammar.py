@@ -47,7 +47,7 @@ GRAMMAR = {
 
     "SimpleStmt": [["t_id", "Array2", "SimpleStmt3", "t_semicolon"]],
     "SimpleStmt2": [["t_id", "Array2", "SimpleStmt3" ]],
-    "SimpleStmt3":[["t_assign", "Expression"],["Expression"]],
+    "SimpleStmt3":[["t_assign", "Expression"],["IsFunction"]],
     
     "Array2": [["t_lb", "Arraysize2", "t_rb"], ["ε"]],
     "Arraysize2": [["Expression"]],
@@ -87,7 +87,7 @@ GRAMMAR = {
 
     "Factor": [["t_aop_pl", "Atom"], ["t_aop_mn", "Atom"], ["Atom"]],
 
-    "Atom": [["t_id", "IsFunction"],["IsFunction"], ["t_decimal"], ["t_hexadecimal"],
+    "Atom": [["t_id", "IsFunction"], ["t_decimal"], ["t_hexadecimal"],
              ["t_string"], ["t_char"], ["t_true"], ["t_false"]],
     
     "IsFunction": [["ε"], ["t_lp", "Parameters2", "t_rp"]],

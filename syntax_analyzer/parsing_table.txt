@@ -1,0 +1,11 @@
+M[Program, t_int] = [['Declist']]
+M[Program, t_char] = [['Declist']]
+M[Program, t_bool] = [['Declist']]
+M[Program, $] = synch
+M[Declist, t_int] = [['Dec', "Declist'"]]
+M[Declist, t_char] = [['Dec', "Declist'"]]
+M[Declist, t_bool] = [['Dec', "Declist'"]]
+M[Declist, $] = synch
+M[Declist', t_int] = [['Dec', "Declist'"]]
+M[Declist', t_char] = [['Dec', "Declist'"]]
+M[Declist', t_bool] = [['Dec', "Declist'"]]
