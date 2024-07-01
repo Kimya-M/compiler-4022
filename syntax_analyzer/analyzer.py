@@ -29,7 +29,6 @@ def semantic_analyzer(root: Node):
     
     for node in PreOrderIter(root):
         order.append(node.name)
-        line.append(node.line)
         print(node.name)
     #add decelerations to symbol table
     for i in range(len(order)):
