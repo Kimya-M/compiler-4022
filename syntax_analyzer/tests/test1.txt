@@ -1,6 +1,5 @@
-int a;
-int main(){
-    int a;
-    int a, b, c;
-    a = d + e;
-}
+int add (int a, char c, bool d)
+{
+    return a;
+};
+add(a,b,c);
