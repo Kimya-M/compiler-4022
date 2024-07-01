@@ -68,8 +68,11 @@ def semantic_analyzer(root: Node):
             else:
                 if order[i + 1] not in symbol_table.table.keys():
                     print(f"{order[i + 1]} variable or function not defined at line {line[i + 1]}!")
+
     return symbol_table.table           
 
+def expression_evaluation():
+    pass 
 
 def reverse_children(root):
     if root.children:
