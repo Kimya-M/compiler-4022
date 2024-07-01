@@ -239,7 +239,7 @@ class Token:
 
 def get_tokens():
     count = 0
-    for line in read_file_line("tests/test1.txt"):
+    for line in read_file_line("syntax_analyzer/tests/test1.txt"):
         count += 1
         beg = 0
         while beg < len(line):

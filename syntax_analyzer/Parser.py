@@ -6,6 +6,7 @@ from ParsingTable import create_parsing_table, print_parsing_table, pretty_print
 from PredictiveParser import predictive_parser, print_parse_tree
 from TerminalColors import bcolors
 from Grammar import GRAMMAR, START_SYMBOL
+from analyzer import reverse_children, semantic_analyzer
 
 
 if __name__ == "__main__":
@@ -37,10 +38,14 @@ if __name__ == "__main__":
 
     parsing_table = create_parsing_table(no_left_factor_grammar, start_symbol)
     #print_parsing_table(parsing_table)
-    pretty_print_parsing_table(parsing_table)
-    print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
+    # pretty_print_parsing_table(parsing_table)
+    #print(f"{bcolors.OKBLUE}-------------------\n-------------------{bcolors.ENDC}\n")
 
     tree_root = predictive_parser(parsing_table, start_symbol)
 
-    print(f"{bcolors.OKBLUE}Parse Tree:{bcolors.ENDC}")
-    print_parse_tree(tree_root)
+    #print(f"{bcolors.OKBLUE}Parse Tree:{bcolors.ENDC}")
+    #print_parse_tree(tree_root)
+
+    # reverse_children(tree_root)
+    
+    # print(semantic_analyzer(tree_root))

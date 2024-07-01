@@ -1,4 +1,6 @@
+int a;
 int main(){
-    greet();
-    printNumber('5');
+    int a;
+    int a, b, c;
+    a = d + e;
 }
