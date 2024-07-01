@@ -1,3 +1,10 @@
+class Symbol:
+    def __init__(self, variable, production):
+        self.variable = variable
+        self.production = production
+        self.type = None
+        self.content = None
+        
 START_SYMBOL = "Program"
 
 GRAMMAR = {

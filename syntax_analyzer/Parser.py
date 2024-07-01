@@ -44,8 +44,8 @@ if __name__ == "__main__":
     tree_root = predictive_parser(parsing_table, start_symbol)
 
     #print(f"{bcolors.OKBLUE}Parse Tree:{bcolors.ENDC}")
-    #print_parse_tree(tree_root)
+    print_parse_tree(tree_root)
 
-    # reverse_children(tree_root)
+    reverse_children(tree_root)
     
-    # print(semantic_analyzer(tree_root))
+    print(semantic_analyzer(tree_root))

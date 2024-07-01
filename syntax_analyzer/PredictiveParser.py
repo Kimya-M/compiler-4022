@@ -5,7 +5,7 @@ from anytree import Node, RenderTree, ContRoundStyle
 
 def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node:
     stack = ['$', start_symbol]
-    root = Node(start_symbol)
+    root = Node((start_symbol, 0))
     parent_stack = [root]
     token_generator = get_tokens()
     current_token = next(token_generator)
@@ -47,7 +47,7 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
             stack.pop()
             current_token = next(token_generator)
             if current_token_value != None:
-                Node(current_token_value, parent=current_node)
+                Node((current_token_value, current_token_line), parent=current_node)
 
             print(f"{bcolors.OKGREEN}Matched Token: {current_token_name.upper()}, Value: {current_token_value}{bcolors.ENDC}")
             # print(f"Matched Token: {current_token_name.upper()}, Value: {current_token_value}")
@@ -69,10 +69,10 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
                     for symbol in reversed(production):
                         stack.append(symbol)
 
-                        child_node = Node(symbol.upper(), parent=current_node)
+                        child_node = Node((symbol.upper(), current_token_line), parent=current_node)
                         parent_stack.append(child_node)
                 else:
-                    child_node = Node("ε", parent=current_node)
+                    child_node = Node(("ε", current_token_line), parent=current_node)
                     stack.pop()
             else:
                 print(f"{bcolors.FAIL}Syntax Error at line #{current_token_line}, Extra token: {current_token_name}{bcolors.ENDC}")
@@ -90,14 +90,15 @@ def predictive_parser(parsing_table: dict[str, dict], start_symbol: str) -> Node
 
 def print_parse_tree(root: Node):
     for pre, fill, node in RenderTree(root, style=ContRoundStyle):
-        if node.name == "ε":
-            print(f"{pre}{bcolors.OKCYAN}{node.name}{bcolors.ENDC}")
-        elif node.name[0:2] == "T_":
-            print(f"{pre}{bcolors.OKGREEN}{node.name}{bcolors.ENDC}")
-        elif (ord(node.name[0]) >= 33 and ord(node.name[0]) <= 64) or (ord(node.name[0]) >= 91 and ord(node.name[0]) <= 125):
-            print(f"{pre}{bcolors.OKGREEN}{node.name}{bcolors.ENDC}")
+        name = node.name[0]
+        if name == "ε":
+            print(f"{pre}{bcolors.OKCYAN}{name}{bcolors.ENDC}")
+        elif name[0:2] == "T_":
+            print(f"{pre}{bcolors.OKGREEN}{name}{bcolors.ENDC}")
+        elif (ord(name[0]) >= 33 and ord(name[0]) <= 64) or (ord(name[0]) >= 91 and ord(name[0]) <= 125):
+            print(f"{pre}{bcolors.OKGREEN}{name}{bcolors.ENDC}")
         else:
-            print(f"{pre}{node.name}")
+            print(f"{pre}{name}")
 
 
 if __name__ == "__main__":

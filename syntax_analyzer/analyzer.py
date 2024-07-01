@@ -1,5 +1,5 @@
-from PredictiveParser import predictive_parser
 from anytree import Node, PreOrderIter
+
 
 class SymbolTable:
     def __init__(self):
@@ -26,10 +26,12 @@ def semantic_analyzer(root: Node):
     symbol_table = SymbolTable()
     # Using PostOrderIter for post-order DFS
     order = []
+    line = []
     
     for node in PreOrderIter(root):
-        order.append(node.name)
-        print(node.name)
+        order.append(node.name[0])
+        line.append(node.name[1])
+        print(node.name[0])
     #add decelerations to symbol table
     for i in range(len(order)):
         if order[i] == "COMPOUNDSTMT":
@@ -40,28 +42,33 @@ def semantic_analyzer(root: Node):
             symbol_table.exit_scope()
     
         if(order[i] == "T_ID"):
-            if order[i + 1] in symbol_table.table.keys():
-                print(f"{order[i + 1]} already defined!")
-
+            if(order[i + 3] == "FUNCDEC"):
+                if order[i + 1] in symbol_table.table.keys():
+                    print(f"{order[i + 1]} already defined at line {line[i + 1]}!")
+                    continue
+                symbol_table.add(order[i + 1],"Function",order[i - 1], None)
+            if(order[i - 2] == "VARDECSTMT"):
+                if order[i + 1] in symbol_table.table.keys():
+                    print(f"{order[i + 1]} already defined at line {line[i + 1]}!")
+                    continue
+                symbol_table.add(order[i + 1],"Variable",order[i - 1], None)
+            if(order[i + 3] == "VARDEC"):
+                if order[i + 1] in symbol_table.table.keys():
+                    print(f"{order[i + 1]} already defined at line {line[i + 1]}!")
+                    continue
+                symbol_table.add(order[i + 1],"Variable",order[i - 1], None)
+            if(order[i - 1] == "," and order[i + 2] == "VARDECINIT"):
+                if order[i + 1] in symbol_table.table.keys():
+                    print(f"{order[i + 1]} already defined at line {line[i + 1]}!")
+                    continue
+                j = i
+                while(order[j]!= "VARDECSTMT"):
+                    j -= 1    
+                symbol_table.add(order[i + 1],"Variable",order[j + 1], None)
             else:
-                if(order[i + 3] == "FUNCDEC"):
-                    symbol_table.add(order[i + 1],"Function",order[i - 1], None)
-                if(order[i - 2] == "VARDECSTMT"):
-                    symbol_table.add(order[i + 1],"Variable",order[i - 1], None)
-                if(order[i + 3] == "VARDEC"):
-                    symbol_table.add(order[i + 1],"Variable",order[i - 1], None)
-                if(order[i - 1] == "," and order[i + 2] == "VARDECINIT"):
-                    j = i
-                    while(order[j]!= "VARDECSTMT"):
-                        j -= 1    
-                    symbol_table.add(order[i + 1],"Variable",order[j + 1], None)
-                else:
-                    if order[i + 1] not in symbol_table.table.keys():
-                        print(f"{order[i + 1]} variable or function not defined!")
-    return symbol_table.table
-
-                
-
+                if order[i + 1] not in symbol_table.table.keys():
+                    print(f"{order[i + 1]} variable or function not defined at line {line[i + 1]}!")
+    return symbol_table.table           
 
 
 def reverse_children(root):
@@ -71,6 +78,7 @@ def reverse_children(root):
         # Recursively reverse the children of each child
         for child in root.children:
             reverse_children(child)
+
 
 if __name__ == "__main__":
     pass
