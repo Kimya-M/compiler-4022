@@ -1,1 +1,1 @@
-run syntax-analyser/parser.py. 
+run syntax-analyzer/parser.py. 
